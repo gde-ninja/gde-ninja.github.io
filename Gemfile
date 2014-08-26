@@ -17,3 +17,5 @@ group :development do
 end
 
 gem 'sinatra', '~> 1.4.2'
+gem 'animation', '~>0.1.alpha.3'
+
