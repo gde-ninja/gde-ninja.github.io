@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ux | gde.ninja]]></title>
   <link href="http://gde-ninja.github.io/blog/categories/ux/atom.xml" rel="self"/>
   <link href="http://gde-ninja.github.io/"/>
-  <updated>2014-08-26T23:11:53-04:00</updated>
+  <updated>2014-09-18T11:34:31-04:00</updated>
   <id>http://gde-ninja.github.io/</id>
   <author>
     <name><![CDATA[Etienne Caron]]></name>
@@ -14,20 +14,55 @@
 
   
   <entry>
+    <title type="html"><![CDATA[FFT FTW]]></title>
+    <link href="http://gde-ninja.github.io/blog/2014/09/09/fft-ftw/"/>
+    <updated>2014-09-09T07:33:01-04:00</updated>
+    <id>http://gde-ninja.github.io/blog/2014/09/09/fft-ftw</id>
+    <content type="html"><![CDATA[<!-- 150 wpm, Renderscripted Custom Views, part 2/5 -->
+
+
+<h3>&lsquo;Renderscripted&rsquo; Custom Views, part 2/5</h3>
+
+<p><img class="right" src="/images/posts/Sonagraphe.jpg" width="256" title="Sonagraphe" ></p>
+
+<p>Another nice area of exploration is real-time data processing. Our mobile phones are packed with interesting sensors, we get sound, video, accelerometer data and potentially very <a href="https://www.kickstarter.com/projects/903107259/scio-your-sixth-sense-a-pocket-molecular-sensor-fo">exotic</a>
+<a href="http://www.popsci.com/gadgets/article/2011-10/so-um-why-does-new-google-phone-have-barometer-it">things</a> things.</p>
+
+<p>As a first practical example, we&rsquo;ll create an <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a> based <a href="http://en.wikipedia.org/wiki/Spectrum_analyzer">spectrum analyzer</a>. We&rsquo;ll focus on analyzing sounds for our example, but you can use it to analyze many <a href="http://en.wikipedia.org/wiki/Discrete_Fourier_transform#Applications">types of signals</a>.</p>
+
+<p>First off we&rsquo;ll look at where to get our information. We&rsquo;ll first focus on grabbing audio data from our device&rsquo;s microphone, and then try to analyze sound files.</p>
+
+<p>The Fourier Transform allows us to take samples of our input waveform / time series, and calculate power / frequency. We&rsquo;ll then want to graph this information in various, pretty ways.</p>
+
+<p>You can follow the code samples<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> without a deep understanding of the math, but there&rsquo;s a <a href="http://www.developer.com/java/other/article.php/3374611/Fun-with-Java-How-and-Why-Spectral-Analysis-Works.htm">lot</a> of <a href="http://www.developer.com/java/other/article.php/3457251/Fun-with-Java-Understanding-the-Fast-Fourier-Transform-FFT-Algorithm.htm">available</a> <a href="http://www.developer.com/java/other/article.php/3380031/Spectrum-Analysis-using-Java-Sampling-Frequency-Folding-Frequency-and-the-FFT-Algorithm.htm">material</a> on FFT/DFT I&rsquo;ll be linking to, if you&rsquo;re interesting in digging a bit deeper.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>The code examples can be found in this <a href="https://github.com/kanawish/RenderscriptCustomViews">GitHub repo</a>. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Attack Plan]]></title>
     <link href="http://gde-ninja.github.io/blog/2014/08/26/attack-plan/"/>
     <updated>2014-08-26T22:05:05-04:00</updated>
     <id>http://gde-ninja.github.io/blog/2014/08/26/attack-plan</id>
-    <content type="html"><![CDATA[<!-- 150 wpm (+30w) -->
+    <content type="html"><![CDATA[<!-- 150 wpm, Renderscripted Custom Views, part 1/5 -->
 
+
+<h3>&lsquo;Renderscripted&rsquo; Custom Views, part 1/5</h3>
 
 <p><img class="right" src="/images/posts/the_battle.png" width="256" title="The Battle" ></p>
 
 <p>My current goal is to show how Renderscript could be used to create innovative and dynamic UI components. Let&rsquo;s aim to <a href="https://developers.google.com/events/io/sessions/326368573">Echant and Amaze and</a> and&hellip; hmm, what am I forgetting here? :)</p>
 
-<p>One thing to realize is that Renderscript is a tool that can solve quite <em><a href="http://streamcomputing.eu/blog/2013-06-03/the-application-areas-opencl-can-be-used/">interesting</a></em> problems. Drawing primitives and rendering text are mostly solved problems, on Android.</p>
+<p>One thing to realize is that Renderscript is a tool that can solve new and <em><a href="http://streamcomputing.eu/blog/2013-06-03/the-application-areas-opencl-can-be-used/">interesting</a></em> problems. Comparatively, drawing primitives and rendering text are mostly solved problems on Android.</p>
 
-<p>As outlined in <a href="http://developer.android.com/training/custom-views/custom-drawing.html">Custom Drawing</a>, you can programatically render lines, shapes, text and so on. Also note that <a href="http://developer.android.com/guide/topics/resources/drawable-resource.html">Drawable and Animation Resources</a> can be defined as xml resources.</p>
+<p>As outlined in <a href="http://developer.android.com/training/custom-views/custom-drawing.html">Custom Drawing</a>, you can programmatically render lines, shapes, text and so on. Also note that <a href="http://developer.android.com/guide/topics/resources/drawable-resource.html">Drawable and Animation Resources</a> can be defined as xml resources.</p>
 
 <p>This leaves us with a solution (a high performance number crunching tool) looking for a problem. Since we can crunch large data sets, <a href="http://shop.oreilly.com/product/0636920000617.do">beautiful visualisation</a> of data is one interesting area of exploration.</p>
 

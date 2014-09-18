@@ -10,13 +10,13 @@
 <meta charset="utf-8">
 <meta http-equiv="cleartype" content="on">
 
-<title>Attack Plan - gde.ninja</title>
+<title>FFT FTW - gde.ninja</title>
 <meta name="author" content="Etienne Caron">
 
 
 
 
-<meta name="description" content="&lsquo;Renderscripted&rsquo; Custom Views, part 1/5 My current goal is to show how Renderscript could be used to create innovative and dynamic UI &hellip;">
+<meta name="description" content="&lsquo;Renderscripted&rsquo; Custom Views, part 2/5 Another nice area of exploration is real-time data processing. Our mobile phones are packed with &hellip;">
 
 <meta name="keywords" content="renderscript, ui, ux ">
 
@@ -32,23 +32,23 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:image" content"">
   
-  <meta name="twitter:title" content="Attack Plan">
-  <meta name="twitter:description" content="&lsquo;Renderscripted&rsquo; Custom Views, part 1/5 My current goal is to show how Renderscript could be used to create innovative and dynamic UI &hellip;">
+  <meta name="twitter:title" content="FFT FTW">
+  <meta name="twitter:description" content="&lsquo;Renderscripted&rsquo; Custom Views, part 2/5 Another nice area of exploration is real-time data processing. Our mobile phones are packed with &hellip;">
   <meta name="twitter:creator" content="@kanawish">
 
 
 <!-- Open Graph -->
 <meta property="og:local" content="en_US">
 <meta property="og:type" content="article">
-<meta property="og:url" content="http://gde-ninja.github.io/blog/2014/08/26/attack-plan">
-<meta property="og:title" content="Attack Plan">
-<meta property="og:description" content="&lsquo;Renderscripted&rsquo; Custom Views, part 1/5 My current goal is to show how Renderscript could be used to create innovative and dynamic UI &hellip;">
+<meta property="og:url" content="http://gde-ninja.github.io/blog/2014/09/09/fft-ftw">
+<meta property="og:title" content="FFT FTW">
+<meta property="og:description" content="&lsquo;Renderscripted&rsquo; Custom Views, part 2/5 Another nice area of exploration is real-time data processing. Our mobile phones are packed with &hellip;">
 
   <meta property="og:image" content="">
 
 <meta property="og:site_name" content="gde.ninja">
 
-<link rel="canonical" href="http://gde-ninja.github.io/blog/2014/08/26/attack-plan">
+<link rel="canonical" href="http://gde-ninja.github.io/blog/2014/09/09/fft-ftw">
 <link href="/favicon.png" rel="icon">
 <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
@@ -113,32 +113,41 @@
     <header class="header-title">
       <div class="header-title-wrap">
         
-          <h1 class="entry-title"><a href="/blog/2014/08/26/attack-plan/" rel="bookmark" title="Attack Plan">Attack Plan</a></h1>
+          <h1 class="entry-title"><a href="/blog/2014/09/09/fft-ftw/" rel="bookmark" title="FFT FTW">FFT FTW</a></h1>
         
-        <h2>August 26, 2014</h2>
+        <h2>September 09, 2014</h2>
       </div><!-- /.header-title-wrap -->
     </header>
     <div class="entry-content">
-      <!-- 150 wpm, Renderscripted Custom Views, part 1/5 -->
+      <!-- 150 wpm, Renderscripted Custom Views, part 2/5 -->
 
 
-<h3>&lsquo;Renderscripted&rsquo; Custom Views, part 1/5</h3>
+<h3>&lsquo;Renderscripted&rsquo; Custom Views, part 2/5</h3>
 
-<p><img class="right" src="/images/posts/the_battle.png" width="256" title="The Battle" ></p>
+<p><img class="right" src="/images/posts/Sonagraphe.jpg" width="256" title="Sonagraphe" ></p>
 
-<p>My current goal is to show how Renderscript could be used to create innovative and dynamic UI components. Let&rsquo;s aim to <a href="https://developers.google.com/events/io/sessions/326368573">Echant and Amaze and</a> and&hellip; hmm, what am I forgetting here? :)</p>
+<p>Another nice area of exploration is real-time data processing. Our mobile phones are packed with interesting sensors, we get sound, video, accelerometer data and potentially very <a href="https://www.kickstarter.com/projects/903107259/scio-your-sixth-sense-a-pocket-molecular-sensor-fo">exotic</a>
+<a href="http://www.popsci.com/gadgets/article/2011-10/so-um-why-does-new-google-phone-have-barometer-it">things</a> things.</p>
 
-<p>One thing to realize is that Renderscript is a tool that can solve new and <em><a href="http://streamcomputing.eu/blog/2013-06-03/the-application-areas-opencl-can-be-used/">interesting</a></em> problems. Comparatively, drawing primitives and rendering text are mostly solved problems on Android.</p>
+<p>As a first practical example, we&rsquo;ll create an <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a> based <a href="http://en.wikipedia.org/wiki/Spectrum_analyzer">spectrum analyzer</a>. We&rsquo;ll focus on analyzing sounds for our example, but you can use it to analyze many <a href="http://en.wikipedia.org/wiki/Discrete_Fourier_transform#Applications">types of signals</a>.</p>
 
-<p>As outlined in <a href="http://developer.android.com/training/custom-views/custom-drawing.html">Custom Drawing</a>, you can programmatically render lines, shapes, text and so on. Also note that <a href="http://developer.android.com/guide/topics/resources/drawable-resource.html">Drawable and Animation Resources</a> can be defined as xml resources.</p>
+<p>First off we&rsquo;ll look at where to get our information. We&rsquo;ll first focus on grabbing audio data from our device&rsquo;s microphone, and then try to analyze sound files.</p>
 
-<p>This leaves us with a solution (a high performance number crunching tool) looking for a problem. Since we can crunch large data sets, <a href="http://shop.oreilly.com/product/0636920000617.do">beautiful visualisation</a> of data is one interesting area of exploration.</p>
+<p>The Fourier Transform allows us to take samples of our input waveform / time series, and calculate power / frequency. We&rsquo;ll then want to graph this information in various, pretty ways.</p>
 
-<p>Another avenue is <a href="http://en.wikipedia.org/wiki/Procedural_generation">live graphical content generation</a>. We can render complex geometric shapes to add <a href="http://www.merriam-webster.com/dictionary/pizzazz">pizzazz</a> and flair to our apps. Think <a href="http://en.wikipedia.org/wiki/Fractal">fractals</a>, special effects, sounds even, animations&hellip;</p>
+<p>You can follow the code samples<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> without a deep understanding of the math, but there&rsquo;s a <a href="http://www.developer.com/java/other/article.php/3374611/Fun-with-Java-How-and-Why-Spectral-Analysis-Works.htm">lot</a> of <a href="http://www.developer.com/java/other/article.php/3457251/Fun-with-Java-Understanding-the-Fast-Fourier-Transform-FFT-Algorithm.htm">available</a> <a href="http://www.developer.com/java/other/article.php/3380031/Spectrum-Analysis-using-Java-Sampling-Frequency-Folding-Frequency-and-the-FFT-Algorithm.htm">material</a> on FFT/DFT I&rsquo;ll be linking to, if you&rsquo;re interesting in digging a bit deeper.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>The code examples can be found in this <a href="https://github.com/kanawish/RenderscriptCustomViews">GitHub repo</a>. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
 
       <footer class="entry-meta">
         <span class="entry-tags"><a href="/categories/#renderscript," title="Pages tagged renderscript," class="tag">renderscript,</a><a href="/categories/#ui," title="Pages tagged ui," class="tag">ui,</a><a href="/categories/#ux" title="Pages tagged ux" class="tag">ux</a></span>
-        <span><a href="/blog/2014/08/26/attack-plan/" rel="bookmark" title="Attack Plan">Attack Plan</a> was published on <span class="entry-date date published updated"><time datetime="2014-08-26T22:05:05-04:00">August 26, 2014</time></span></span>
+        <span><a href="/blog/2014/09/09/fft-ftw/" rel="bookmark" title="FFT FTW">FFT FTW</a> was published on <span class="entry-date date published updated"><time datetime="2014-09-09T07:33:01-04:00">September 09, 2014</time></span></span>
         
         <span class="author vcard"><span class="fn"><a href="" title="About Etienne Caron">Etienne Caron</a></span></span>
         
@@ -148,11 +157,11 @@
       <div class="read-more">
         
           <div class="read-more-header">
-            <a href="/blog/2014/09/09/fft-ftw/" class="btn">Read More</a>
+            <a href="/blog/2014/08/26/attack-plan/" class="btn">Read More</a>
           </div><!-- /.read-more-header -->
           <div class="read-more-content">
-            <h3><a href="/blog/2014/09/09/fft-ftw/" title="FFT FTW">FFT FTW</a></h3>
-            <p>### 'Renderscripted' Custom Views, part 2/5 {% img right /images/posts/Sonagraphe.jpg 256 Sonagraphe %}  Another nice area of exploration &hellip;&hellip; <a href="/blog/2014/09/09/fft-ftw/"> Continue reading</a></p>
+            <h3><a href="/blog/2014/08/26/attack-plan/" title="Attack Plan">Attack Plan</a></h3>
+            <p>&lsquo;Renderscripted&rsquo; Custom Views, part 1/5My current goal is to show how Renderscript could be used to create innovative and &hellip;&hellip; <a href="/blog/2014/08/26/attack-plan/"> Continue reading</a></p>
           </div><!-- /.read-more-content -->
         
         <div class="read-more-list">
