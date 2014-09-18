@@ -1,0 +1,27 @@
+---
+layout: post
+title: "FFT FTW"
+date: 2014-09-09 07:33:01 -0400
+comments: true
+categories: renderscript, UI, UX
+published: true
+
+---
+<!-- 150 wpm, Renderscripted Custom Views, part 2/5 -->
+
+### 'Renderscripted' Custom Views, part 2/5 
+
+{% img right /images/posts/Sonagraphe.jpg 256 Sonagraphe %}  
+
+Another nice area of exploration is real-time data processing. Our mobile phones are packed with interesting sensors, we get sound, video, accelerometer data and potentially very [exotic](https://www.kickstarter.com/projects/903107259/scio-your-sixth-sense-a-pocket-molecular-sensor-fo)
+[things](http://www.popsci.com/gadgets/article/2011-10/so-um-why-does-new-google-phone-have-barometer-it) things.
+
+As a first practical example, we'll create an [FFT](http://en.wikipedia.org/wiki/Fast_Fourier_transform) based [spectrum analyzer](http://en.wikipedia.org/wiki/Spectrum_analyzer). We'll focus on analyzing sounds for our example, but you can use it to analyze many [types of signals](http://en.wikipedia.org/wiki/Discrete_Fourier_transform#Applications). 
+
+First off we'll look at where to get our information. We'll first focus on grabbing audio data from our device's microphone, and then try to analyze sound files.
+
+The Fourier Transform allows us to take samples of our input waveform / time series, and calculate power / frequency. We'll then want to graph this information in various, pretty ways.
+
+You can follow the code samples[^1] without a deep understanding of the math, but there's a [lot](http://www.developer.com/java/other/article.php/3374611/Fun-with-Java-How-and-Why-Spectral-Analysis-Works.htm) of [available](http://www.developer.com/java/other/article.php/3457251/Fun-with-Java-Understanding-the-Fast-Fourier-Transform-FFT-Algorithm.htm) [material](http://www.developer.com/java/other/article.php/3380031/Spectrum-Analysis-using-Java-Sampling-Frequency-Folding-Frequency-and-the-FFT-Algorithm.htm) on FFT/DFT I'll be linking to, if you're interesting in digging a bit deeper.
+
+[^1]: The code examples can be found in this [GitHub repo](https://github.com/kanawish/RenderscriptCustomViews). 
