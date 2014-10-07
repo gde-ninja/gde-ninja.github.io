@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | gde.ninja]]></title>
   <link href="http://gde-ninja.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://gde-ninja.github.io/"/>
-  <updated>2014-10-06T22:33:37-04:00</updated>
+  <updated>2014-10-06T22:35:45-04:00</updated>
   <id>http://gde-ninja.github.io/</id>
   <author>
     <name><![CDATA[Etienne Caron]]></name>
@@ -194,7 +194,7 @@ public static Observable&lt;Lorem&gt; loadLorem(final Context context) {
 
 <p>We&rsquo;ve basically seen how to implement something equivalent to AsyncTask using RxJava. But there&rsquo;s a lot more depth to the subject. The next objectives will be to demonstrate how to chain multiple asynchronous calls (with potential switching logic), and how we can run multiple parallel queries and manipulate the returned data.</p>
 
-<p>I&rsquo;d love to hear from you if you have questions or feedback. You can reach me on Google+ at <a href="https://plus.google.com/+EtienneCaron">https://plus.google.com/+EtienneCaron</a>. Again, you&rsquo;ll find the <a href="https://github.com/gde-ninja/working-examples-rx">working examples project</a> on GitHub.</p>
+<p>Again, you&rsquo;ll find the <a href="https://github.com/gde-ninja/working-examples-rx">working examples project</a> on GitHub. I&rsquo;d love to hear from you if you have questions or feedback. You can reach me on <a href="https://plus.google.com/+EtienneCaron">plus.google.com/+EtienneCaron</a>.</p>
 ]]></content>
   </entry>
   
