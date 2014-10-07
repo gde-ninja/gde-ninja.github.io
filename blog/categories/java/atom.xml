@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | gde.ninja]]></title>
   <link href="http://gde-ninja.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://gde-ninja.github.io/"/>
-  <updated>2014-10-06T23:07:07-04:00</updated>
+  <updated>2014-10-06T23:07:54-04:00</updated>
   <id>http://gde-ninja.github.io/</id>
   <author>
     <name><![CDATA[Etienne Caron]]></name>
@@ -22,7 +22,7 @@
 
 <h2>Intro to RxJava</h2>
 
-<p><a href="https://www.flickr.com/photos/vblibrary/4585453038" title="Dangerously Reactive by Enokson, on Flickr"><img src="https://farm5.staticflickr.com/4043/4585453038_8ea467d4d4_m.jpg" width="187" height="240" style="float:left;margin:15px;" alt="Dangerously Reactive"></a></p>
+<p><a href="https://www.flickr.com/photos/vblibrary/4585453038" title="Dangerously Reactive by Enokson, on Flickr"><img src="https://farm5.staticflickr.com/4043/4585453038_8ea467d4d4_m.jpg" width="187" height="240" style="float:right;margin:15px;" alt="Dangerously Reactive"></a></p>
 
 <p>This summer, I was introduced to <a href="https://github.com/ReactiveX/RxJava/wiki">RxJava</a>, a Java implementation of <a href="https://rx.codeplex.com/">Reactive Extensions</a>, from the people at NetFlix. This library basically extends the Observer pattern to support sequences of data and events, while allowing you to compose sequences together, and (somewhat) abstract away the complexities of low-level threading, synchronization, thread-safety, concurrent data structures, non-blocking I/O, etc&hellip;</p>
 
