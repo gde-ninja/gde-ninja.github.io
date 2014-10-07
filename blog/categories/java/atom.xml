@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Java | gde.ninja]]></title>
+  <link href="http://gde-ninja.github.io/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://gde-ninja.github.io/"/>
+  <updated>2014-10-06T22:33:37-04:00</updated>
+  <id>http://gde-ninja.github.io/</id>
+  <author>
+    <name><![CDATA[Etienne Caron]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Exploration: RxJava]]></title>
+    <link href="http://gde-ninja.github.io/blog/2014/09/18/exploration-rxjava/"/>
+    <updated>2014-09-18T11:54:11-04:00</updated>
+    <id>http://gde-ninja.github.io/blog/2014/09/18/exploration-rxjava</id>
+    <content type="html"><![CDATA[<h1>Working Examples [#1.0]</h1>
+
+<h2>Intro to RxJava</h2>
+
+<p>This summer, I was introduced to <a href="https://github.com/ReactiveX/RxJava/wiki">RxJava</a>, a Java implementation of <a href="https://rx.codeplex.com/">Reactive Extensions</a>, from the people at NetFlix. This library basically extends the Observer pattern to support sequences of data and events, while allowing you to compose sequences together, and (somewhat) abstract away the complexities of low-level threading, synchronization, thread-safety, concurrent data structures, non-blocking I/O, etc&hellip;</p>
+
+<p>If, like me, you&rsquo;re new to this library, a few alarm bells might be ringing off in your head after reading the previous paragraph. I.e. &ldquo;That sounds like an awful <em>lot</em> of complex bits this library promises to take care of for me.&rdquo;</p>
+
+<p>Reactive extensions are indeed a potentially dangerous tool. With great power&hellip; :)</p>
+
+<p>So, much more the reason to educate ourselves. Trying things out often will let us decide if an idea is elegant or unwieldy.</p>
+
+<h2>Loading files with RxJava</h2>
+
+<p><img class="right" src="/images/posts/14-10-06_RxLorem_ScreenShot.png" width="256" title="Screenshot" ></p>
+
+<p>Let&rsquo;s start with a fairly basic example. I recommend you go and download the <a href="https://github.com/gde-ninja/working-examples-rx">working examples project</a> on github. Here we have an activity with an editText wigdet and two buttons. Pressing the load button triggers an Rx asynchronous loading process that will result in editText being filled out with lorem-ipsum text. The clear button clears the text so we can try it again.</p>
+
+<h3>Creating an Observable to instanciate class <code>Lorem</code></h3>
+
+<p>First, I&rsquo;d recommend you keep an open browser tab pointing to the <a href="https://github.com/ReactiveX/RxJava/wiki/Observable">basics of Observables</a>.</p>
+
+<p>One of the core concepts of Rx is that many instructions execute in parallel, and their results are later processed by &ldquo;observers&rdquo;.</p>
+
+<pre><code class="java">Observable.OnSubscribe&lt;Lorem&gt; onSubscribe = new Observable.OnSubscribe&lt;Lorem&gt;()
+{
+    @Override
+    public void call(Subscriber&lt;? super Lorem&gt; subscriber) {
+        // Create a new instance of the Lorem class, by loading
+        // a text file asynchronously from 'disk'.
+        ...
+    }
+}
+
+Observable&lt;Lorem&gt; observable = Observable.create(onSubscribe);
+</code></pre>
+
+<p>Once you&rsquo;ve created your instance of &ldquo;Observable&rdquo;, you can then <em>subscribe</em> an observer to it.</p>
+
+<pre><code class="java">observable.subscribe(
+    // onNext: will be called for each lorem loaded. (1 only in our example)
+    new Action1&lt;Lorem&gt;() {
+        @Override
+        public void call(Lorem lorem) {
+            editText.setText(lorem.getLoremText());
+        }
+    },
+    // onError: will be called if an error occurs.
+    new Action1&lt;Throwable&gt;() {
+        @Override
+        public void call(Throwable throwable) {
+            String msg = getString(R.string.error_loading_lorem);
+            Log.v(TAG, msg, throwable);
+            editText.setText(msg);
+        }
+    }
+);
+</code></pre>
+
+<h3>Asynchronous processing</h3>
+
+<p>So far, fairly straightforward. Loading a file off disk is typically something you&rsquo;ll want to be doing off of the UI thread on Android. The interesting thing about observable is how we can easily assign a Scheduler.</p>
+
+<p>For example, in our example, we want the file loaded outside of the UI thread. We can assign a <code>Scheduler</code> to control the thread on which we execute a specific part of the process.</p>
+
+<pre><code class="java">// We subscribe on io schedulers since we're I/O limited. (i.e. loading content on disk)
+Observable&lt;Lorem&gt; observable = 
+    Observable.create(onSubscribe).subscribeOn(Schedulers.io());
+</code></pre>
+
+<p>When we <code>subscribe()</code> to the observable, the call to <code>onSubscribe</code> will be taking place on an <code>Executor</code> thread pool that will grow as needed.</p>
+
+<p>On the observer end, we&rsquo;ll want the <code>onNext</code>/<code>onError</code>/<code>onCompleted</code> handlers we provided to <code>subscribe()</code> to be executed on the UI thread. This is possible thanks to an Android specific extension to Rx called <code>rxjava-android</code>. (You&rsquo;ll find the correct dependencies in the linked example project.)</p>
+
+<pre><code class="java">// This makes sure onNext, onError and onComplete are called from the main thread.
+observable
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe(...);
+</code></pre>
+
+<h4>Assembling the pieces</h4>
+
+<p>If you want to get a better feel for the process, simply set a break point at the call to <code>Lorem.loadLorem()</code> as seen below:</p>
+
+<h5>MainActivity.java</h5>
+
+<pre><code class="java">@Override
+public void onClick(View v) {
+    /*
+     * The thing of note here is how
+     * - We're assigning the desired 'observing' thread
+     * - We're handling onNext/onError
+     */
+    Lorem.loadLorem(MainActivity.this)
+        // This makes sure onNext,onError and onComplete are called from the main thread.
+        .observeOn(AndroidSchedulers.mainThread())
+        // Subscribing will start the loading process.
+        .subscribe(
+                // onNext will be called for each lorem loaded. (1 only in this example)
+                new Action1&lt;Lorem&gt;() {
+                    @Override
+                    public void call(Lorem lorem) {
+                        editText.setText(lorem.getLoremText());
+                    }
+                },
+                // onError will be called if an error occurs.
+                new Action1&lt;Throwable&gt;() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        String msg = getString(R.string.error_loading_lorem);
+                        Log.v(TAG, msg, throwable);
+                        editText.setText(msg);
+                    }
+                }
+        );
+}
+</code></pre>
+
+<p>You can see the observers (onNext/onError) we&rsquo;re subscribing to the Observable, and the assignment to the main thread <code>Scheduler</code>.</p>
+
+<p>And below, you can see the code creating our observable, and it&rsquo;s own <code>Scheduler</code> assignment.</p>
+
+<h5>Lorem.java</h5>
+
+<pre><code class="java">/**
+ * Returns an Observable that will load one file off the assets directory. (lorem.txt)
+ *
+ * Note below how the Observable is configured to be subscribed on the io thread.
+ *
+ * @param context
+ * @return
+ */
+public static Observable&lt;Lorem&gt; loadLorem(final Context context) {
+    return Observable.create(
+        new Observable.OnSubscribe&lt;Lorem&gt;() {
+            @Override
+            public void call(Subscriber&lt;? super Lorem&gt; subscriber) {
+                // Not a fan of the double-try-catch here.
+                // TODO: Change example to use apache commons-io.
+                try {
+                    // Get an input stream that points to the asset.
+                    InputStream is = context.getAssets().open("lorem.txt");
+                    try {
+                        // Create lorem instance.
+                        Lorem lorem = new Lorem();
+                        // Load the text from the input stream.
+                        lorem.loremText = slurp(is, 2048);
+
+                        // Call the subscriber with the new lorem.
+                        subscriber.onNext(lorem);
+
+                    } catch (IOException e) {
+                        // Forward exceptions to onError()
+                        subscriber.onError(e);
+                    } finally {
+                        // Making sure to close the input stream.
+                        is.close();
+                    }
+                } catch (IOException e) {
+                    // Forward exceptions to onError()
+                    subscriber.onError(e);
+                }
+
+                // Our job is done.
+                subscriber.onCompleted();
+            }
+        })
+        // We subscribe on io schedulers since we're I/O limited. (i.e. loading content on disk)
+        .subscribeOn(Schedulers.io());
+}
+</code></pre>
+
+<h4>In conclusion</h4>
+
+<p>We&rsquo;ve basically seen how to implement something equivalent to AsyncTask using RxJava. But there&rsquo;s a lot more depth to the subject. The next objectives will be to demonstrate how to chain multiple asynchronous calls (with potential switching logic), and how we can run multiple parallel queries and manipulate the returned data.</p>
+
+<p>I&rsquo;d love to hear from you if you have questions or feedback. You can reach me on Google+ at <a href="https://plus.google.com/+EtienneCaron">https://plus.google.com/+EtienneCaron</a>. Again, you&rsquo;ll find the <a href="https://github.com/gde-ninja/working-examples-rx">working examples project</a> on GitHub.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,24 +1,125 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[gde.ninja]]></title>
-  <link href="http://gde-ninja.github.io/atom.xml" rel="self"/>
-  <link href="http://gde-ninja.github.io/"/>
-  <updated>2014-10-06T22:33:37-04:00</updated>
-  <id>http://gde-ninja.github.io/</id>
-  <author>
-    <name><![CDATA[Etienne Caron]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+
+<head>
+
+
+<meta charset="utf-8">
+<meta http-equiv="cleartype" content="on">
+
+<title>Exploration: RxJava - gde.ninja</title>
+<meta name="author" content="Etienne Caron">
+
+
+
+
+<meta name="description" content="Working Examples [#1.0] Intro to RxJava This summer, I was introduced to RxJava, a Java implementation of Reactive Extensions, from the people at &hellip;">
+
+<meta name="keywords" content="java rx, ">
+
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Twitter Cards -->
 
   
-  <entry>
-    <title type="html"><![CDATA[Exploration: RxJava]]></title>
-    <link href="http://gde-ninja.github.io/blog/2014/09/18/exploration-rxjava/"/>
-    <updated>2014-09-18T11:54:11-04:00</updated>
-    <id>http://gde-ninja.github.io/blog/2014/09/18/exploration-rxjava</id>
-    <content type="html"><![CDATA[<h1>Working Examples [#1.0]</h1>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content"">
+  
+  <meta name="twitter:title" content="Exploration: RxJava">
+  <meta name="twitter:description" content="Working Examples [#1.0] Intro to RxJava This summer, I was introduced to RxJava, a Java implementation of Reactive Extensions, from the people at &hellip;">
+  <meta name="twitter:creator" content="@kanawish">
+
+
+<!-- Open Graph -->
+<meta property="og:local" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:url" content="http://gde-ninja.github.io/blog/2014/09/18/exploration-rxjava">
+<meta property="og:title" content="Exploration: RxJava">
+<meta property="og:description" content="Working Examples [#1.0] Intro to RxJava This summer, I was introduced to RxJava, a Java implementation of Reactive Extensions, from the people at &hellip;">
+
+  <meta property="og:image" content="">
+
+<meta property="og:site_name" content="gde.ninja">
+
+<link rel="canonical" href="http://gde-ninja.github.io/blog/2014/09/18/exploration-rxjava">
+<link href="/favicon.png" rel="icon">
+<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="/atom.xml" rel="alternate" title="gde.ninja" type="application/atom+xml">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+<script>Modernizr || document.write('<script src="/javascripts/vendor/modernizr-2.6.2.custom.min.js"><\/script>') </script>
+
+
+
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="/images/gravatar.jpeg" alt="Etienne Caron photo" class="author-photo">
+					<h4>Etienne Caron</h4>
+					<p>Android Lead at PasswordBox.com, GDG Montreal Android organizer, Android GDE</p>
+				</li>
+				<li><a href="//www.zimmerman.io">Learn More</a></li>
+				
+				<li>
+					<a href="http://twitter.com/kanawish"><i class="fa fa-twitter"></i> Twitter</a>
+				</li>
+				<li>
+					<a href="http://plus.google.com/+EtienneCaron"><i class="fa fa-google-plus"></i> Google+</a>
+				</li>
+				<li>
+					<a href="http://github.com/kanawish"><i class="fa fa-github"></i> GitHub</a>
+				</li>
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="/posts/">All Posts</a></li>
+				<li><a href="/categories/">All Categories</a></li>
+			</ul>
+		</li>
+		<li><a href="http://android-montreal.com">GDG Montreal Android</a></li><li><a href="http://kanawish.com">Personal Blog</a></li>
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="/blog/2014/09/18/exploration-rxjava/" rel="bookmark" title="Exploration: RxJava">Exploration: RxJava</a></h1>
+        
+        <h2>September 18, 2014</h2>
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1>Working Examples [#1.0]</h1>
 
 <h2>Intro to RxJava</h2>
 
@@ -32,7 +133,7 @@
 
 <h2>Loading files with RxJava</h2>
 
-<p><img class="right" src="http://gde-ninja.github.io/images/posts/14-10-06_RxLorem_ScreenShot.png" width="256" title="Screenshot" ></p>
+<p><img class="right" src="/images/posts/14-10-06_RxLorem_ScreenShot.png" width="256" title="Screenshot" ></p>
 
 <p>Let&rsquo;s start with a fairly basic example. I recommend you go and download the <a href="https://github.com/gde-ninja/working-examples-rx">working examples project</a> on github. Here we have an activity with an editText wigdet and two buttons. Pressing the load button triggers an Rx asynchronous loading process that will result in editText being filled out with lorem-ipsum text. The clear button clears the text so we can try it again.</p>
 
@@ -42,7 +143,7 @@
 
 <p>One of the core concepts of Rx is that many instructions execute in parallel, and their results are later processed by &ldquo;observers&rdquo;.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -64,12 +165,12 @@
 </span><span class='line'><span class="o">}</span>
 </span><span class='line'>
 </span><span class='line'><span class="n">Observable</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;</span> <span class="n">observable</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">onSubscribe</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>Once you&rsquo;ve created your instance of &ldquo;Observable&rdquo;, you can then <em>subscribe</em> an observer to it.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -105,7 +206,7 @@
 </span><span class='line'>        <span class="o">}</span>
 </span><span class='line'>    <span class="o">}</span>
 </span><span class='line'><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <h3>Asynchronous processing</h3>
@@ -114,20 +215,20 @@
 
 <p>For example, in our example, we want the file loaded outside of the UI thread. We can assign a <code>Scheduler</code> to control the thread on which we execute a specific part of the process.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// We subscribe on io schedulers since we&#39;re I/O limited. (i.e. loading content on disk)</span>
 </span><span class='line'><span class="n">Observable</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;</span> <span class="n">observable</span> <span class="o">=</span>
 </span><span class='line'>  <span class="n">Observable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">onSubscribe</span><span class="o">).</span><span class="na">subscribeOn</span><span class="o">(</span><span class="n">Schedulers</span><span class="o">.</span><span class="na">io</span><span class="o">());</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>When we <code>subscribe()</code> to the observable, the call to <code>onSubscribe</code> will be taking place on an <code>Executor</code> thread pool that will grow as needed.</p>
 
 <p>On the observer end, we&rsquo;ll want the <code>onNext</code>/<code>onError</code>/<code>onCompleted</code> handlers we provided to <code>subscribe()</code> to be executed on the UI thread. This is possible thanks to an Android specific extension to Rx called <code>rxjava-android</code>. (You&rsquo;ll find the correct dependencies in the linked example project.)</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -135,7 +236,7 @@
 </span><span class='line'><span class="n">observable</span>
 </span><span class='line'>  <span class="o">.</span><span class="na">observeOn</span><span class="o">(</span><span class="n">AndroidSchedulers</span><span class="o">.</span><span class="na">mainThread</span><span class="o">())</span>
 </span><span class='line'>  <span class="o">.</span><span class="na">subscribe</span><span class="o">(...);</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <h4>Assembling the pieces</h4>
@@ -144,7 +245,7 @@
 
 <h5>MainActivity.java</h5>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -204,7 +305,7 @@
 </span><span class='line'>              <span class="o">}</span>
 </span><span class='line'>      <span class="o">);</span>
 </span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>You can see the observers (onNext/onError) we&rsquo;re subscribing to the Observable, and the assignment to the main thread <code>Scheduler</code>.</p>
@@ -213,7 +314,7 @@
 
 <h5>Lorem.java</h5>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -305,7 +406,7 @@
 </span><span class='line'>      <span class="c1">// We subscribe on io schedulers since we&#39;re I/O limited. (i.e. loading content on disk)</span>
 </span><span class='line'>      <span class="o">.</span><span class="na">subscribeOn</span><span class="o">(</span><span class="n">Schedulers</span><span class="o">.</span><span class="na">io</span><span class="o">());</span>
 </span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <h4>In conclusion</h4>
@@ -313,75 +414,66 @@
 <p>We&rsquo;ve basically seen how to implement something equivalent to AsyncTask using RxJava. But there&rsquo;s a lot more depth to the subject. The next objectives will be to demonstrate how to chain multiple asynchronous calls (with potential switching logic), and how we can run multiple parallel queries and manipulate the returned data.</p>
 
 <p>I&rsquo;d love to hear from you if you have questions or feedback. You can reach me on Google+ at <a href="https://plus.google.com/+EtienneCaron">https://plus.google.com/+EtienneCaron</a>. Again, you&rsquo;ll find the <a href="https://github.com/gde-ninja/working-examples-rx">working examples project</a> on GitHub.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[FFT FTW]]></title>
-    <link href="http://gde-ninja.github.io/blog/2014/09/09/fft-ftw/"/>
-    <updated>2014-09-09T07:33:01-04:00</updated>
-    <id>http://gde-ninja.github.io/blog/2014/09/09/fft-ftw</id>
-    <content type="html"><![CDATA[<!-- 150 wpm, Renderscripted Custom Views, part 2/5 -->
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="/categories/#java" title="Pages tagged java" class="tag">java</a><a href="/categories/#rx," title="Pages tagged rx," class="tag">rx,</a></span>
+        <span><a href="/blog/2014/09/18/exploration-rxjava/" rel="bookmark" title="Exploration: RxJava">Exploration: RxJava</a> was published on <span class="entry-date date published updated"><time datetime="2014-09-18T11:54:11-04:00">September 18, 2014</time></span></span>
+        
+        <span class="author vcard"><span class="fn"><a href="" title="About Etienne Caron">Etienne Caron</a></span></span>
+        
+      </footer>
+    </div><!-- /.entry-content -->
+    
+      <div class="read-more">
+        
+          <div class="read-more-header">
+            <a href="/blog/2014/09/09/fft-ftw/" class="btn">Read More</a>
+          </div><!-- /.read-more-header -->
+          <div class="read-more-content">
+            <h3><a href="/blog/2014/09/09/fft-ftw/" title="FFT FTW">FFT FTW</a></h3>
+            <p>&lsquo;Renderscripted&rsquo; Custom Views, part 2/5Another nice area of exploration is real-time data processing. Our mobile phones are &hellip;&hellip; <a href="/blog/2014/09/09/fft-ftw/"> Continue reading</a></p>
+          </div><!-- /.read-more-content -->
+        
+        <div class="read-more-list">
+          
+            <div class="list-item">
+              <h4><a href="/blog/2014/08/26/attack-plan/" title="Attack Plan">Attack Plan</a></h4>
+              <span>Published on August 26, 2014</span>
+            </div><!-- /.list-item -->
+          
+            <div class="list-item">
+              <h4><a href="/blog/2014/08/26/first-post/" title="First post">First post</a></h4>
+              <span>Published on August 26, 2014</span>
+            </div><!-- /.list-item -->
+          
+        </div><!-- /.read-more-list -->
+      </div><!-- /.read-more -->
+    
+    
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2014 Etienne Caron. Powered by <a href="http://octopress.org">Octopress</a> using the <a href="https://github.com/Z1MM32M4N/hpstr-theme/">HPSTR Theme for Octopress</a>.</span>
+
+  </footer>
+</div><!-- /.footer-wrapper -->
 
 
-<h3>&lsquo;Renderscripted&rsquo; Custom Views, part 2/5</h3>
-
-<p><img class="right" src="http://gde-ninja.github.io/images/posts/Sonagraphe.jpg" width="256" title="Sonagraphe" ></p>
-
-<p>Another nice area of exploration is real-time data processing. Our mobile phones are packed with interesting sensors, we get sound, video, accelerometer data and potentially very <a href="https://www.kickstarter.com/projects/903107259/scio-your-sixth-sense-a-pocket-molecular-sensor-fo">exotic</a>
-<a href="http://www.popsci.com/gadgets/article/2011-10/so-um-why-does-new-google-phone-have-barometer-it">things</a> things.</p>
-
-<p>As a first practical example, we&rsquo;ll create an <a href="http://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT</a> based <a href="http://en.wikipedia.org/wiki/Spectrum_analyzer">spectrum analyzer</a>. We&rsquo;ll focus on analyzing sounds for our example, but you can use it to analyze many <a href="http://en.wikipedia.org/wiki/Discrete_Fourier_transform#Applications">types of signals</a>.</p>
-
-<p>First off we&rsquo;ll look at where to get our information. We&rsquo;ll first focus on grabbing audio data from our device&rsquo;s microphone, and then try to analyze sound files.</p>
-
-<p>The Fourier Transform allows us to take samples of our input waveform / time series, and calculate power / frequency. We&rsquo;ll then want to graph this information in various, pretty ways.</p>
-
-<p>You can follow the code samples<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> without a deep understanding of the math, but there&rsquo;s a <a href="http://www.developer.com/java/other/article.php/3374611/Fun-with-Java-How-and-Why-Spectral-Analysis-Works.htm">lot</a> of <a href="http://www.developer.com/java/other/article.php/3457251/Fun-with-Java-Understanding-the-Fast-Fourier-Transform-FFT-Algorithm.htm">available</a> <a href="http://www.developer.com/java/other/article.php/3380031/Spectrum-Analysis-using-Java-Sampling-Frequency-Folding-Frequency-and-the-FFT-Algorithm.htm">material</a> on FFT/DFT I&rsquo;ll be linking to, if you&rsquo;re interesting in digging a bit deeper.</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>The code examples can be found in this <a href="https://github.com/kanawish/RenderscriptCustomViews">GitHub repo</a>. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Attack Plan]]></title>
-    <link href="http://gde-ninja.github.io/blog/2014/08/26/attack-plan/"/>
-    <updated>2014-08-26T22:05:05-04:00</updated>
-    <id>http://gde-ninja.github.io/blog/2014/08/26/attack-plan</id>
-    <content type="html"><![CDATA[<!-- 150 wpm, Renderscripted Custom Views, part 1/5 -->
+	        
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<!--
+<script src="/javascripts/octopress.js" type="text/javascript"></script>
+-->
+<script src="/javascripts/scripts.min.js"></script>
 
 
-<h3>&lsquo;Renderscripted&rsquo; Custom Views, part 1/5</h3>
 
-<p><img class="right" src="http://gde-ninja.github.io/images/posts/the_battle.png" width="256" title="The Battle" ></p>
 
-<p>My current goal is to show how Renderscript could be used to create innovative and dynamic UI components. Let&rsquo;s aim to <a href="https://developers.google.com/events/io/sessions/326368573">Echant and Amaze and</a> and&hellip; hmm, what am I forgetting here? :)</p>
 
-<p>One thing to realize is that Renderscript is a tool that can solve new and <em><a href="http://streamcomputing.eu/blog/2013-06-03/the-application-areas-opencl-can-be-used/">interesting</a></em> problems. Comparatively, drawing primitives and rendering text are mostly solved problems on Android.</p>
+	        
 
-<p>As outlined in <a href="http://developer.android.com/training/custom-views/custom-drawing.html">Custom Drawing</a>, you can programmatically render lines, shapes, text and so on. Also note that <a href="http://developer.android.com/guide/topics/resources/drawable-resource.html">Drawable and Animation Resources</a> can be defined as xml resources.</p>
-
-<p>This leaves us with a solution (a high performance number crunching tool) looking for a problem. Since we can crunch large data sets, <a href="http://shop.oreilly.com/product/0636920000617.do">beautiful visualisation</a> of data is one interesting area of exploration.</p>
-
-<p>Another avenue is <a href="http://en.wikipedia.org/wiki/Procedural_generation">live graphical content generation</a>. We can render complex geometric shapes to add <a href="http://www.merriam-webster.com/dictionary/pizzazz">pizzazz</a> and flair to our apps. Think <a href="http://en.wikipedia.org/wiki/Fractal">fractals</a>, special effects, sounds even, animations&hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[First Post]]></title>
-    <link href="http://gde-ninja.github.io/blog/2014/08/26/first-post/"/>
-    <updated>2014-08-26T08:46:36-04:00</updated>
-    <id>http://gde-ninja.github.io/blog/2014/08/26/first-post</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://gde-ninja.github.io/images/posts/Android_Robot_100.png" title="Andy" > This Friday I&rsquo;ve received the excellent news that I&rsquo;ve been accepted as an <a href="https://developers.google.com/experts/">Android GDE</a>! I will be blogging my GDE activities here, at gde.ninja.</p>
-
-<p>Next up, I&rsquo;ll start exploring how to leverage Renderscript to create really dynamic custom Views.</p>
-]]></content>
-  </entry>
-  
-</feed>
+</body>
+</html>

@@ -131,6 +131,339 @@
 <header>
   <div class="entry-meta">
     <span class="entry-date date published updated">
+      <time datetime="2014-09-18T11:54:11-04:00">
+        <a href="/blog/2014/09/18/exploration-rxjava/">September 18, 2014</a>
+      </time>
+    </span>
+    <span class="author vcard">
+      <span class="fn">
+        <a href="" title="About Etienne Caron">Etienne Caron</a>
+      </span>
+    </span>
+    
+  </div><!-- /.entry-meta -->
+  
+    <h1 class="entry-title">
+      <a href="/blog/2014/09/18/exploration-rxjava/" rel="bookmark" title="Exploration: RxJava" itemprop="url">Exploration: RxJava</a>
+    </h1>
+  
+</header>
+
+<div class="entry-content">
+  <h1>Working Examples [#1.0]</h1>
+
+<h2>Intro to RxJava</h2>
+
+<p>This summer, I was introduced to <a href="https://github.com/ReactiveX/RxJava/wiki">RxJava</a>, a Java implementation of <a href="https://rx.codeplex.com/">Reactive Extensions</a>, from the people at NetFlix. This library basically extends the Observer pattern to support sequences of data and events, while allowing you to compose sequences together, and (somewhat) abstract away the complexities of low-level threading, synchronization, thread-safety, concurrent data structures, non-blocking I/O, etc&hellip;</p>
+
+<p>If, like me, you&rsquo;re new to this library, a few alarm bells might be ringing off in your head after reading the previous paragraph. I.e. &ldquo;That sounds like an awful <em>lot</em> of complex bits this library promises to take care of for me.&rdquo;</p>
+
+<p>Reactive extensions are indeed a potentially dangerous tool. With great power&hellip; :)</p>
+
+<p>So, much more the reason to educate ourselves. Trying things out often will let us decide if an idea is elegant or unwieldy.</p>
+
+<h2>Loading files with RxJava</h2>
+
+<p><img class="right" src="/images/posts/14-10-06_RxLorem_ScreenShot.png" width="256" title="Screenshot" ></p>
+
+<p>Let&rsquo;s start with a fairly basic example. I recommend you go and download the <a href="https://github.com/gde-ninja/working-examples-rx">working examples project</a> on github. Here we have an activity with an editText wigdet and two buttons. Pressing the load button triggers an Rx asynchronous loading process that will result in editText being filled out with lorem-ipsum text. The clear button clears the text so we can try it again.</p>
+
+<h3>Creating an Observable to instanciate class <code>Lorem</code></h3>
+
+<p>First, I&rsquo;d recommend you keep an open browser tab pointing to the <a href="https://github.com/ReactiveX/RxJava/wiki/Observable">basics of Observables</a>.</p>
+
+<p>One of the core concepts of Rx is that many instructions execute in parallel, and their results are later processed by &ldquo;observers&rdquo;.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Observable</span><span class="o">.</span><span class="na">OnSubscribe</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;</span> <span class="n">onSubscribe</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Observable</span><span class="o">.</span><span class="na">OnSubscribe</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;()</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="nd">@Override</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">(</span><span class="n">Subscriber</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Lorem</span><span class="o">&gt;</span> <span class="n">subscriber</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>      <span class="c1">// Create a new instance of the Lorem class, by loading</span>
+</span><span class='line'>      <span class="c1">// a text file asynchronously from &#39;disk&#39;.</span>
+</span><span class='line'>      <span class="o">...</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Observable</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;</span> <span class="n">observable</span> <span class="o">=</span> <span class="n">Observable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">onSubscribe</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you&rsquo;ve created your instance of &ldquo;Observable&rdquo;, you can then <em>subscribe</em> an observer to it.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">observable</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span>
+</span><span class='line'>    <span class="c1">// onNext: will be called for each lorem loaded. (1 only in our example)</span>
+</span><span class='line'>    <span class="k">new</span> <span class="n">Action1</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="nd">@Override</span>
+</span><span class='line'>        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">(</span><span class="n">Lorem</span> <span class="n">lorem</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">editText</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">lorem</span><span class="o">.</span><span class="na">getLoremText</span><span class="o">());</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">},</span>
+</span><span class='line'>    <span class="c1">// onError: will be called if an error occurs.</span>
+</span><span class='line'>    <span class="k">new</span> <span class="n">Action1</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="nd">@Override</span>
+</span><span class='line'>        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">throwable</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">String</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">getString</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">string</span><span class="o">.</span><span class="na">error_loading_lorem</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">Log</span><span class="o">.</span><span class="na">v</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="n">msg</span><span class="o">,</span> <span class="n">throwable</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">editText</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">msg</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Asynchronous processing</h3>
+
+<p>So far, fairly straightforward. Loading a file off disk is typically something you&rsquo;ll want to be doing off of the UI thread on Android. The interesting thing about observable is how we can easily assign a Scheduler.</p>
+
+<p>For example, in our example, we want the file loaded outside of the UI thread. We can assign a <code>Scheduler</code> to control the thread on which we execute a specific part of the process.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// We subscribe on io schedulers since we&#39;re I/O limited. (i.e. loading content on disk)</span>
+</span><span class='line'><span class="n">Observable</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;</span> <span class="n">observable</span> <span class="o">=</span>
+</span><span class='line'>  <span class="n">Observable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">onSubscribe</span><span class="o">).</span><span class="na">subscribeOn</span><span class="o">(</span><span class="n">Schedulers</span><span class="o">.</span><span class="na">io</span><span class="o">());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When we <code>subscribe()</code> to the observable, the call to <code>onSubscribe</code> will be taking place on an <code>Executor</code> thread pool that will grow as needed.</p>
+
+<p>On the observer end, we&rsquo;ll want the <code>onNext</code>/<code>onError</code>/<code>onCompleted</code> handlers we provided to <code>subscribe()</code> to be executed on the UI thread. This is possible thanks to an Android specific extension to Rx called <code>rxjava-android</code>. (You&rsquo;ll find the correct dependencies in the linked example project.)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// This makes sure onNext, onError and onComplete are called from the main thread.</span>
+</span><span class='line'><span class="n">observable</span>
+</span><span class='line'>  <span class="o">.</span><span class="na">observeOn</span><span class="o">(</span><span class="n">AndroidSchedulers</span><span class="o">.</span><span class="na">mainThread</span><span class="o">())</span>
+</span><span class='line'>  <span class="o">.</span><span class="na">subscribe</span><span class="o">(...);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Assembling the pieces</h4>
+
+<p>If you want to get a better feel for the process, simply set a break point at the call to <code>Lorem.loadLorem()</code> as seen below:</p>
+
+<h5>MainActivity.java</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">View</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="cm">/*</span>
+</span><span class='line'><span class="cm">  * The thing of note here is how</span>
+</span><span class='line'><span class="cm">  * - We&#39;re assigning the desired &#39;observing&#39; thread</span>
+</span><span class='line'><span class="cm">  * - We&#39;re handling onNext/onError</span>
+</span><span class='line'><span class="cm">  */</span>
+</span><span class='line'>  <span class="n">Lorem</span><span class="o">.</span><span class="na">loadLorem</span><span class="o">(</span><span class="n">MainActivity</span><span class="o">.</span><span class="na">this</span><span class="o">)</span>
+</span><span class='line'>      <span class="c1">// This makes sure onNext,onError and onComplete are called from the main thread.</span>
+</span><span class='line'>      <span class="o">.</span><span class="na">observeOn</span><span class="o">(</span><span class="n">AndroidSchedulers</span><span class="o">.</span><span class="na">mainThread</span><span class="o">())</span>
+</span><span class='line'>      <span class="c1">// Subscribing will start the loading process.</span>
+</span><span class='line'>      <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span>
+</span><span class='line'>              <span class="c1">// onNext will be called for each lorem loaded. (1 only in this example)</span>
+</span><span class='line'>              <span class="k">new</span> <span class="n">Action1</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span><span class='line'>                  <span class="nd">@Override</span>
+</span><span class='line'>                  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">(</span><span class="n">Lorem</span> <span class="n">lorem</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                      <span class="n">editText</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">lorem</span><span class="o">.</span><span class="na">getLoremText</span><span class="o">());</span>
+</span><span class='line'>                  <span class="o">}</span>
+</span><span class='line'>              <span class="o">},</span>
+</span><span class='line'>              <span class="c1">// onError will be called if an error occurs.</span>
+</span><span class='line'>              <span class="k">new</span> <span class="n">Action1</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span><span class='line'>                  <span class="nd">@Override</span>
+</span><span class='line'>                  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">throwable</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                      <span class="n">String</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">getString</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">string</span><span class="o">.</span><span class="na">error_loading_lorem</span><span class="o">);</span>
+</span><span class='line'>                      <span class="n">Log</span><span class="o">.</span><span class="na">v</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="n">msg</span><span class="o">,</span> <span class="n">throwable</span><span class="o">);</span>
+</span><span class='line'>                      <span class="n">editText</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">msg</span><span class="o">);</span>
+</span><span class='line'>                  <span class="o">}</span>
+</span><span class='line'>              <span class="o">}</span>
+</span><span class='line'>      <span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can see the observers (onNext/onError) we&rsquo;re subscribing to the Observable, and the assignment to the main thread <code>Scheduler</code>.</p>
+
+<p>And below, you can see the code creating our observable, and it&rsquo;s own <code>Scheduler</code> assignment.</p>
+
+<h5>Lorem.java</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Returns an Observable that will load one file off the assets directory. (lorem.txt)</span>
+</span><span class='line'><span class="cm"> *</span>
+</span><span class='line'><span class="cm"> * Note below how the Observable is configured to be subscribed on the io thread.</span>
+</span><span class='line'><span class="cm"> *</span>
+</span><span class='line'><span class="cm"> * @param context</span>
+</span><span class='line'><span class="cm"> * @return</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;</span> <span class="nf">loadLorem</span><span class="o">(</span><span class="kd">final</span> <span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">Observable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span>
+</span><span class='line'>      <span class="k">new</span> <span class="n">Observable</span><span class="o">.</span><span class="na">OnSubscribe</span><span class="o">&lt;</span><span class="n">Lorem</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span><span class='line'>          <span class="nd">@Override</span>
+</span><span class='line'>          <span class="kd">public</span> <span class="kt">void</span> <span class="nf">call</span><span class="o">(</span><span class="n">Subscriber</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Lorem</span><span class="o">&gt;</span> <span class="n">subscriber</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>              <span class="c1">// Not a fan of the double-try-catch here.</span>
+</span><span class='line'>              <span class="c1">// TODO: Change example to use apache commons-io.</span>
+</span><span class='line'>              <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>                  <span class="c1">// Get an input stream that points to the asset.</span>
+</span><span class='line'>                  <span class="n">InputStream</span> <span class="n">is</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getAssets</span><span class="o">().</span><span class="na">open</span><span class="o">(</span><span class="s">&quot;lorem.txt&quot;</span><span class="o">);</span>
+</span><span class='line'>                  <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>                      <span class="c1">// Create lorem instance.</span>
+</span><span class='line'>                      <span class="n">Lorem</span> <span class="n">lorem</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Lorem</span><span class="o">();</span>
+</span><span class='line'>                      <span class="c1">// Load the text from the input stream.</span>
+</span><span class='line'>                      <span class="n">lorem</span><span class="o">.</span><span class="na">loremText</span> <span class="o">=</span> <span class="n">slurp</span><span class="o">(</span><span class="n">is</span><span class="o">,</span> <span class="mi">2048</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>                      <span class="c1">// Call the subscriber with the new lorem.</span>
+</span><span class='line'>                      <span class="n">subscriber</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="n">lorem</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>                  <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                      <span class="c1">// Forward exceptions to onError()</span>
+</span><span class='line'>                      <span class="n">subscriber</span><span class="o">.</span><span class="na">onError</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+</span><span class='line'>                  <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+</span><span class='line'>                      <span class="c1">// Making sure to close the input stream.</span>
+</span><span class='line'>                      <span class="n">is</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class='line'>                  <span class="o">}</span>
+</span><span class='line'>              <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                  <span class="c1">// Forward exceptions to onError()</span>
+</span><span class='line'>                  <span class="n">subscriber</span><span class="o">.</span><span class="na">onError</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+</span><span class='line'>              <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>              <span class="c1">// Our job is done.</span>
+</span><span class='line'>              <span class="n">subscriber</span><span class="o">.</span><span class="na">onCompleted</span><span class="o">();</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>      <span class="o">})</span>
+</span><span class='line'>      <span class="c1">// We subscribe on io schedulers since we&#39;re I/O limited. (i.e. loading content on disk)</span>
+</span><span class='line'>      <span class="o">.</span><span class="na">subscribeOn</span><span class="o">(</span><span class="n">Schedulers</span><span class="o">.</span><span class="na">io</span><span class="o">());</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>In conclusion</h4>
+
+<p>We&rsquo;ve basically seen how to implement something equivalent to AsyncTask using RxJava. But there&rsquo;s a lot more depth to the subject. The next objectives will be to demonstrate how to chain multiple asynchronous calls (with potential switching logic), and how we can run multiple parallel queries and manipulate the returned data.</p>
+
+<p>I&rsquo;d love to hear from you if you have questions or feedback. You can reach me on Google+ at <a href="https://plus.google.com/+EtienneCaron">https://plus.google.com/+EtienneCaron</a>. Again, you&rsquo;ll find the <a href="https://github.com/gde-ninja/working-examples-rx">working examples project</a> on GitHub.</p>
+
+  
+  
+</div><!-- /.entry-content -->
+
+
+
+
+
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  
+
+
+
+<header>
+  <div class="entry-meta">
+    <span class="entry-date date published updated">
       <time datetime="2014-09-09T07:33:01-04:00">
         <a href="/blog/2014/09/09/fft-ftw/">September 09, 2014</a>
       </time>
